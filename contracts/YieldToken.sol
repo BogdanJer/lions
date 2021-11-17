@@ -130,8 +130,12 @@ contract YieldToken is ERC20("SexyToken", "SEXY") {
 		}
     }
 
-	function burn(address _from, uint256 _amount) external onlyOwner{
-		_burn(_from, _amount);
+	function burn(address _from, uint256 _amount) external {
+        if(msg.sender.isContract()) {
+		    _burn(_from, _amount);
+        }else if(msg.sender == owner) {
+            _burn(msg.sender, _amount);
+        }
 	}
 
 	function getTotalClaimable(address _user) external view isValidAddress isContract returns(uint256) {
